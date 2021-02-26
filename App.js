@@ -1,16 +1,17 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
-import {Text} from 'react-native';
+import {Provider as StateProvider} from 'react-redux';
+import configureStore from './src/redux/store';
+import MainStackNavigator from './src/navigation/MainStackNavigator';
+import {PersistGate} from 'redux-persist/integration/react';
+import SplashScreen from './src/screens/SplashScreen';
 
-const App: () => React$Node = () => {
-  return <Text>Hello world!</Text>;
-};
-
-export default App;
+export default function App() {
+  const {store, persistor} = configureStore();
+  return (
+    <StateProvider store={store}>
+      <PersistGate loading={<SplashScreen />} persistor={persistor}>
+        <MainStackNavigator />
+      </PersistGate>
+    </StateProvider>
+  );
+}
