@@ -4,18 +4,20 @@ import {Card} from 'native-base';
 
 function HorizontalArticleCard({article}) {
   return (
-    // <View >
     <Card style={styles.card}>
       <Image source={{uri: article.thumbnail}} style={styles.thumbnail} />
       <View style={styles.contentContainer}>
-        <Text style={styles.headline}>{article.headline}</Text>
+        <Text style={styles.headline} numberOfLines={4} ellipsizeMode="tail">
+          {article.headline}
+        </Text>
         <View style={styles.divider} />
         <Text style={styles.publicationDate}>
-          {article.firstPublicationDate}
+          {new Date(
+            Date.parse(article.firstPublicationDate),
+          ).toLocaleDateString()}
         </Text>
       </View>
     </Card>
-    // </View>
   );
 }
 

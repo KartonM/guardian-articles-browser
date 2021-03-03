@@ -4,13 +4,13 @@ import {FlatList, View, Text, StyleSheet} from 'react-native';
 import HorizontalArticleCard from './HorizontalArticleCard';
 import {useEffect, useState} from 'react';
 
-const HorizontalArticlesList = () => {
+const HorizontalArticlesList = ({sectionId, sectionName}) => {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
     console.log('robię request');
     fetch(
-      'https://content.guardianapis.com/search?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8&show-fields=all',
+      `https://content.guardianapis.com/search?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8&page-size=2&section=${sectionId}&show-fields=headline,standfirst,thumbnail,firstPublicationDate`,
     )
       .then((response) => response.json())
       .then((json) => {
@@ -19,11 +19,11 @@ const HorizontalArticlesList = () => {
         setArticles(fetchedArticles);
       })
       .catch((error) => console.error(error));
-  }, []);
+  }, [sectionId]);
 
   return (
     <View>
-      <Text style={styles.header}>AAA</Text>
+      <Text style={styles.header}>{sectionName}</Text>
       <FlatList
         ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
         contentContainerStyle={styles.listContentContainer}

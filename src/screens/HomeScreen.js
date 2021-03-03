@@ -1,22 +1,23 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import HorizontalArticleCard from '../components/HorizontalArticleCard';
+import {StyleSheet, View} from 'react-native';
+import ArticleCard from '../components/ArticleCard';
 import HorizontalArticlesList from '../components/HorizontalArticlesList';
 
 function HomeScreen() {
   return (
     <View style={styles.container}>
-      {/*<HorizontalArticleCard*/}
-      {/*  article={{*/}
-      {/*    title:*/}
-      {/*      'React Native still has the concept of style inheritance, but limited to text subtrees. In this case',*/}
-      {/*    // 'dupa',*/}
-      {/*    thumbnail:*/}
-      {/*      'https://media.guim.co.uk/4f53091cef6238123052c5a2329a8e067b840fa6/0_173_5190_3114/500.jpg',*/}
-      {/*    publicationDate: '28.01',*/}
-      {/*  }}*/}
-      {/*/>*/}
-      <HorizontalArticlesList />
+      <HorizontalArticlesList sectionId={'football'} sectionName={'Football'} />
+      <ArticleCard
+        article={{
+          headline:
+            'Budget 2021 live: Johnson faces Starmer at PMQs before Sunak unveils measures to protect jobs',
+          trailText:
+            'Plus: Coventry’s ground-hopping, a 16-goal swing and the highest honour bestowed on a referee',
+          firstPublicationDate: '2021-03-03T09:14:05Z',
+          thumbnail:
+            'https://media.guim.co.uk/9b915b46a8c3301e6baae011de2020c1a51d9db3/0_186_5568_3341/500.jpg',
+        }}
+      />
     </View>
   );
 }
