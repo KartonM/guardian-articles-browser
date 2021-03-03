@@ -4,15 +4,15 @@ import {FlatList, View, Text, StyleSheet} from 'react-native';
 import HorizontalArticleCard from './HorizontalArticleCard';
 import useGuardianArticles from '../hooks/useGuardianArticles';
 
-const HorizontalArticlesList = ({sectionId, sectionName}) => {
+const HorizontalArticlesList = ({section}) => {
   const [articles] = useGuardianArticles({
-    sectionId: sectionId,
+    sectionId: section.id,
     pageSize: 3,
   });
 
   return (
     <View>
-      <Text style={styles.header}>{sectionName}</Text>
+      <Text style={styles.header}>{section.name}</Text>
       <FlatList
         ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
         contentContainerStyle={styles.listContentContainer}

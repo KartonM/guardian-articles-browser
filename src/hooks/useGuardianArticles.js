@@ -8,17 +8,19 @@ function useGuardianArticles({sectionId = '', pageSize = 10} = {}) {
   const fetchMore = useCallback(() => setShouldFetch(true), []);
 
   useEffect(() => {
-    if (!shouldFetch) {
+    if (!shouldFetch || pageSize <= 0) {
       return;
     }
 
     const sectionQuery = sectionId ? `&section=${sectionId}` : '';
     fetch(
-      `https://content.guardianapis.com/search?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8&page-size=${pageSize}${sectionQuery}&show-fields=headline,standfirst,thumbnail,firstPublicationDate`,
+      `https://content.guardianapis.com/search?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8&page-size=${pageSize}${sectionQuery}&page=${page}&show-fields=headline,trailText,thumbnail,firstPublicationDate`,
     )
       .then((response) => response.json())
       .then((json) => {
-        const fetchedArticles = json.response.results.map((res) => res.fields);
+        const fetchedArticles = json.response.results.map((res) => {
+          return {id: res.id, ...res.fields};
+        });
         console.log(fetchedArticles);
 
         setShouldFetch(false);
