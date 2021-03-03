@@ -2,24 +2,13 @@ import React from 'react';
 
 import {FlatList, View, Text, StyleSheet} from 'react-native';
 import HorizontalArticleCard from './HorizontalArticleCard';
-import {useEffect, useState} from 'react';
+import useGuardianArticles from '../hooks/useGuardianArticles';
 
 const HorizontalArticlesList = ({sectionId, sectionName}) => {
-  const [articles, setArticles] = useState([]);
-
-  useEffect(() => {
-    console.log('robię request');
-    fetch(
-      `https://content.guardianapis.com/search?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8&page-size=2&section=${sectionId}&show-fields=headline,standfirst,thumbnail,firstPublicationDate`,
-    )
-      .then((response) => response.json())
-      .then((json) => {
-        const fetchedArticles = json.response.results.map((res) => res.fields);
-        console.log(fetchedArticles);
-        setArticles(fetchedArticles);
-      })
-      .catch((error) => console.error(error));
-  }, [sectionId]);
+  const [articles] = useGuardianArticles({
+    sectionId: sectionId,
+    pageSize: 3,
+  });
 
   return (
     <View>
@@ -29,6 +18,7 @@ const HorizontalArticlesList = ({sectionId, sectionName}) => {
         contentContainerStyle={styles.listContentContainer}
         horizontal={true}
         data={articles}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => <HorizontalArticleCard article={item} />}
       />
     </View>
