@@ -37,15 +37,14 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   contentContainer: {
-    backgroundColor: 'red',
     paddingLeft: 12,
+    paddingTop: 4,
     paddingRight: 2,
     alignItems: 'stretch',
     flex: 1,
   },
   headline: {
     fontSize: 16,
-    backgroundColor: 'green',
   },
   divider: {
     borderBottomColor: 'black',
@@ -56,7 +55,6 @@ const styles = StyleSheet.create({
   publicationDate: {
     fontSize: 14,
     top: 9,
-    backgroundColor: 'orange',
   },
 });
 

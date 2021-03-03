@@ -9,11 +9,11 @@ const ListItemType = Object.freeze({section: 1, header: 2, article: 3});
 
 const ArticlesList = ({
   sections = [],
-  allArticlesSection = {id: '', name: 'All articles'},
+  mainSection = {id: '', name: 'All articles'},
 }) => {
   const [articles, fetchMore] = useGuardianArticles({
     pageSize: 10,
-    sectionId: allArticlesSection.id,
+    sectionId: mainSection.id,
   });
 
   const sectionListItems = sections.map((section) => {
@@ -22,7 +22,7 @@ const ArticlesList = ({
 
   const headerListItem = {
     itemType: ListItemType.header,
-    header: allArticlesSection.name,
+    header: mainSection.name,
   };
 
   const articleListItems = articles.map((article) => {
@@ -62,6 +62,12 @@ const styles = StyleSheet.create({
   },
   listContentContainer: {
     paddingVertical: 10,
+  },
+  header: {
+    marginHorizontal: 12,
+    marginTop: 12,
+    fontSize: 22,
+    fontWeight: '400',
   },
 });
 
