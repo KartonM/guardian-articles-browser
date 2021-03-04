@@ -12,6 +12,11 @@ function useGuardianArticles({
   const fetchMore = useCallback(() => setShouldFetch(true), []);
 
   useEffect(() => {
+    setPage(1);
+    setShouldFetch(true);
+  }, [sectionId]);
+
+  useEffect(() => {
     if (!shouldFetch || pageSize <= 0) {
       return;
     }
@@ -25,7 +30,7 @@ function useGuardianArticles({
         const fetchedArticles = json.response.results.map((res) => {
           return {id: res.id, ...res.fields};
         });
-        console.log(fetchedArticles);
+        // console.log(fetchedArticles);
 
         setShouldFetch(false);
         setArticles((oldArticles) =>

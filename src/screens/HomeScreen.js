@@ -2,8 +2,12 @@ import React from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import ArticlesList from '../components/ArticlesList';
 import {Ionicons} from '@expo/vector-icons';
+import {useSelector} from 'react-redux';
 
 function HomeScreen({navigation}) {
+  const followedSections = useSelector((state) =>
+    state.sections.filter((section) => section.isFollowed),
+  );
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
@@ -14,12 +18,7 @@ function HomeScreen({navigation}) {
           color="black"
         />
       </TouchableOpacity>
-      <ArticlesList
-        sections={[
-          {id: 'football', name: 'Football'},
-          {id: 'tv-and-radio', name: 'Television & radio'},
-        ]}
-      />
+      <ArticlesList sections={followedSections} />
     </View>
   );
 }
