@@ -1,16 +1,14 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
+import {useRoute} from '@react-navigation/native';
 import ArticlesList from '../components/ArticlesList';
 
-function HomeScreen() {
+function SectionScreen() {
+  const route = useRoute();
+
   return (
     <View style={styles.container}>
-      <ArticlesList
-        sections={[
-          {id: 'football', name: 'Football'},
-          {id: 'tv-and-radio', name: 'Television & radio'},
-        ]}
-      />
+      <ArticlesList mainSection={route.params.section} />
     </View>
   );
 }
@@ -23,4 +21,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default SectionScreen;
