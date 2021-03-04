@@ -1,9 +1,13 @@
 import {useEffect, useState, useCallback} from 'react';
 
-function useGuardianArticles({sectionId = '', pageSize = 10} = {}) {
+function useGuardianArticles({
+  sectionId = '',
+  pageSize = 10,
+  initArticles = [],
+} = {}) {
   const [page, setPage] = useState(1);
   const [shouldFetch, setShouldFetch] = useState(true);
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState(initArticles);
 
   const fetchMore = useCallback(() => setShouldFetch(true), []);
 
@@ -24,7 +28,9 @@ function useGuardianArticles({sectionId = '', pageSize = 10} = {}) {
         console.log(fetchedArticles);
 
         setShouldFetch(false);
-        setArticles((oldArticles) => [...oldArticles, ...fetchedArticles]);
+        setArticles((oldArticles) =>
+          page === 1 ? fetchedArticles : [...oldArticles, ...fetchedArticles],
+        );
         setPage(page + 1);
       })
       .catch((error) => console.error(error));

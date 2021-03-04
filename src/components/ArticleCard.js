@@ -1,19 +1,41 @@
 import React from 'react';
 import {Text, StyleSheet, View, Image} from 'react-native';
 import {Card} from 'native-base';
+import SkeletonContent from 'react-native-skeleton-content';
 
 function ArticleCard({article}) {
   return (
     <Card style={styles.card}>
-      <Image source={{uri: article.thumbnail}} style={styles.thumbnail} />
-      <Text style={styles.headline}>{article.headline}</Text>
-      <Text style={styles.publicationDate}>
-        {new Date(
-          Date.parse(article.firstPublicationDate),
-        ).toLocaleDateString()}
-      </Text>
+      <SkeletonContent isLoading={!article} containerStyle={styles.thumbnail}>
+        <Image source={{uri: article?.thumbnail}} style={styles.thumbnail} />
+      </SkeletonContent>
+      <SkeletonContent
+        containerStyle={styles.textContainer}
+        isLoading={!article}
+        layout={[
+          {key: 'line1', width: '100%', height: 16},
+          {key: 'line2', width: '80%', height: 16, marginTop: 4},
+          {key: 'line3', width: 72, height: 14, marginTop: 14},
+        ]}>
+        <Text style={styles.headline}>{article?.headline}</Text>
+        <Text style={styles.publicationDate}>
+          {article &&
+            new Date(
+              Date.parse(article.firstPublicationDate),
+            ).toLocaleDateString()}
+        </Text>
+      </SkeletonContent>
       <View style={styles.divider} />
-      <Text style={styles.trailText}>{article.trailText}</Text>
+      <SkeletonContent
+        containerStyle={styles.textContainer}
+        isLoading={!article}
+        layout={[
+          {key: 'line1', width: '100%', height: 16},
+          {key: 'line2', width: '100%', height: 16, marginTop: 4},
+          {key: 'line3', width: '30%', height: 16, marginTop: 4},
+        ]}>
+        <Text style={styles.trailText}>{article?.trailText}</Text>
+      </SkeletonContent>
     </Card>
   );
 }
@@ -23,7 +45,7 @@ const styles = StyleSheet.create({
     flex: 0,
     width: '95%',
     borderRadius: 8,
-    paddingBottom: 10,
+    paddingBottom: 16,
     alignSelf: 'center',
   },
   thumbnail: {
@@ -44,9 +66,6 @@ const styles = StyleSheet.create({
   headline: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginHorizontal: 16,
-    marginVertical: 10,
-    // backgroundColor: 'green',
   },
   divider: {
     borderBottomColor: 'black',
@@ -57,13 +76,16 @@ const styles = StyleSheet.create({
   },
   publicationDate: {
     fontSize: 14,
-    marginHorizontal: 16,
+    marginTop: 10,
     color: 'gray',
   },
   trailText: {
     fontSize: 16,
+  },
+  textContainer: {
+    flex: 0,
     marginHorizontal: 16,
-    marginVertical: 10,
+    marginTop: 10,
   },
 });
 

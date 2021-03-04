@@ -10,6 +10,7 @@ const HorizontalArticlesList = ({section}) => {
   const [articles] = useGuardianArticles({
     sectionId: section.id,
     pageSize: 3,
+    initArticles: [null, null],
   });
 
   const navigation = useNavigation();
@@ -41,6 +42,7 @@ const HorizontalArticlesList = ({section}) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => <HorizontalArticleCard article={item} />}
         ListFooterComponent={renderMoreArticlesCard}
+        showsHorizontalScrollIndicator={false}
       />
     </View>
   );

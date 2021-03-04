@@ -14,6 +14,7 @@ const ArticlesList = ({
   const [articles, fetchMore] = useGuardianArticles({
     pageSize: 10,
     sectionId: mainSection.id,
+    initArticles: [null, null, null],
   });
 
   const sectionListItems = sections.map((section) => {
@@ -32,7 +33,7 @@ const ArticlesList = ({
   const listItems = [...sectionListItems, headerListItem, ...articleListItems];
 
   const renderItem = ({item}) => {
-    console.log(item);
+    // console.log(item);
     switch (item.itemType) {
       case ListItemType.section:
         return <HorizontalArticlesList section={item.section} />;
