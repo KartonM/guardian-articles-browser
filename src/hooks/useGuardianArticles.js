@@ -45,7 +45,7 @@ function useGuardianArticles({
         setPage(page + 1);
       })
       .catch((error) => console.error(error));
-  }, [sectionId, page, shouldFetch, pageSize]);
+  }, [sectionId, page, shouldFetch, pageSize, rejectListedSectionIds]);
 
   return [articles, fetchMore];
 }
