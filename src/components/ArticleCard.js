@@ -1,41 +1,47 @@
 import React from 'react';
-import {Text, StyleSheet, View, Image} from 'react-native';
+import {Text, StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import {Card} from 'native-base';
 import SkeletonContent from 'react-native-skeleton-content';
+import {useNavigation} from '@react-navigation/native';
 
 function ArticleCard({article}) {
+  const navigation = useNavigation();
+
   return (
     <Card style={styles.card}>
-      <SkeletonContent isLoading={!article} containerStyle={styles.thumbnail}>
-        <Image source={{uri: article?.thumbnail}} style={styles.thumbnail} />
-      </SkeletonContent>
-      <SkeletonContent
-        containerStyle={styles.textContainer}
-        isLoading={!article}
-        layout={[
-          {key: 'line1', width: '100%', height: 16},
-          {key: 'line2', width: '80%', height: 16, marginTop: 4},
-          {key: 'line3', width: 72, height: 14, marginTop: 14},
-        ]}>
-        <Text style={styles.headline}>{article?.headline}</Text>
-        <Text style={styles.publicationDate}>
-          {article &&
-            new Date(
-              Date.parse(article.firstPublicationDate),
-            ).toLocaleDateString()}
-        </Text>
-      </SkeletonContent>
-      <View style={styles.divider} />
-      <SkeletonContent
-        containerStyle={styles.textContainer}
-        isLoading={!article}
-        layout={[
-          {key: 'line1', width: '100%', height: 16},
-          {key: 'line2', width: '100%', height: 16, marginTop: 4},
-          {key: 'line3', width: '30%', height: 16, marginTop: 4},
-        ]}>
-        <Text style={styles.trailText}>{article?.trailText}</Text>
-      </SkeletonContent>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Article', {article: article})}>
+        <SkeletonContent isLoading={!article} containerStyle={styles.thumbnail}>
+          <Image source={{uri: article?.thumbnail}} style={styles.thumbnail} />
+        </SkeletonContent>
+        <SkeletonContent
+          containerStyle={styles.textContainer}
+          isLoading={!article}
+          layout={[
+            {key: 'line1', width: '100%', height: 16},
+            {key: 'line2', width: '80%', height: 16, marginTop: 4},
+            {key: 'line3', width: 72, height: 14, marginTop: 14},
+          ]}>
+          <Text style={styles.headline}>{article?.headline}</Text>
+          <Text style={styles.publicationDate}>
+            {article &&
+              new Date(
+                Date.parse(article.firstPublicationDate),
+              ).toLocaleDateString()}
+          </Text>
+        </SkeletonContent>
+        <View style={styles.divider} />
+        <SkeletonContent
+          containerStyle={styles.textContainer}
+          isLoading={!article}
+          layout={[
+            {key: 'line1', width: '100%', height: 16},
+            {key: 'line2', width: '100%', height: 16, marginTop: 4},
+            {key: 'line3', width: '30%', height: 16, marginTop: 4},
+          ]}>
+          <Text style={styles.trailText}>{article?.trailText}</Text>
+        </SkeletonContent>
+      </TouchableOpacity>
     </Card>
   );
 }

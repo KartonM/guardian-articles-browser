@@ -29,10 +29,11 @@ function useGuardianArticles({
       : '';
 
     fetch(
-      `https://content.guardianapis.com/search?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8&page-size=${pageSize}${sectionQuery}&page=${page}&show-fields=headline,trailText,thumbnail,firstPublicationDate`,
+      `https://content.guardianapis.com/search?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8&page-size=${pageSize}${sectionQuery}&page=${page}&show-fields=headline,trailText,thumbnail,firstPublicationDate,body`,
     )
       .then((response) => response.json())
       .then((json) => {
+        console.log(json);
         const fetchedArticles = json.response.results.map((res) => {
           return {id: res.id, ...res.fields};
         });
