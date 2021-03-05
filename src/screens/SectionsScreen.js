@@ -1,21 +1,26 @@
 import React from 'react';
 import {StyleSheet, View, Text, FlatList, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {Ionicons} from '@expo/vector-icons';
-import {
-  setSections,
-  toggleSectionFollowed,
-  toggleSectionVisible,
-} from '../redux/reducer';
+import {setSections as setPersistedSections} from '../redux/reducer';
 
 function SectionsScreen() {
-  const sections = useSelector((state) => state.sections);
+  const persistedSections = useSelector((state) => state.sections);
 
+  const [sections, setSections] = useState(persistedSections);
   const dispatch = useDispatch();
 
+  useEffect(
+    () => () => {
+      dispatch(setPersistedSections(sections));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dispatch],
+  );
+
   useEffect(() => {
-    console.log(sections);
+    // console.log(sections);
 
     if (sections.length > 0) {
       return;
@@ -31,7 +36,7 @@ function SectionsScreen() {
           return {id: s.id, name: s.webTitle};
         });
         console.log(fetchedSections);
-        dispatch(setSections(fetchedSections));
+        setSections(fetchedSections);
       });
   }, [sections, dispatch]);
 
@@ -41,13 +46,14 @@ function SectionsScreen() {
         data={sections}
         contentContainerStyle={styles.listContentContainer}
         keyExtractor={(item) => item.id}
-        renderItem={({item}) => (
+        renderItem={({item, index}) => (
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionName}>{item.name}</Text>
             <View style={styles.iconsContainer}>
               <TouchableOpacity
                 onPress={() => {
-                  dispatch(toggleSectionVisible(item.id));
+                  sections[index].isVisible = !sections[index].isVisible;
+                  setSections([...sections]);
                 }}>
                 <Ionicons
                   color="gray"
@@ -57,7 +63,9 @@ function SectionsScreen() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  dispatch(toggleSectionFollowed(item.id));
+                  // dispatch(toggleSectionFollowed(item.id));
+                  sections[index].isFollowed = !sections[index].isFollowed;
+                  setSections([...sections]);
                 }}>
                 <Ionicons
                   color="gold"
