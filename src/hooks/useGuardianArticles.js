@@ -4,6 +4,7 @@ function useGuardianArticles({
   sectionId = '',
   pageSize = 10,
   initArticles = [],
+  rejectListedSectionIds = [],
 } = {}) {
   const [page, setPage] = useState(1);
   const [shouldFetch, setShouldFetch] = useState(true);
@@ -12,11 +13,21 @@ function useGuardianArticles({
   const fetchMore = useCallback(() => setShouldFetch(true), []);
 
   useEffect(() => {
+    setPage(1);
+    setShouldFetch(true);
+  }, [sectionId, rejectListedSectionIds]);
+
+  useEffect(() => {
     if (!shouldFetch || pageSize <= 0) {
       return;
     }
 
-    const sectionQuery = sectionId ? `&section=${sectionId}` : '';
+    const sectionQuery = sectionId
+      ? `&section=${sectionId}`
+      : rejectListedSectionIds.length > 0
+      ? `&section=-${rejectListedSectionIds.join(',-')}`
+      : '';
+
     fetch(
       `https://content.guardianapis.com/search?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8&page-size=${pageSize}${sectionQuery}&page=${page}&show-fields=headline,trailText,thumbnail,firstPublicationDate`,
     )
@@ -25,7 +36,7 @@ function useGuardianArticles({
         const fetchedArticles = json.response.results.map((res) => {
           return {id: res.id, ...res.fields};
         });
-        console.log(fetchedArticles);
+        // console.log(fetchedArticles);
 
         setShouldFetch(false);
         setArticles((oldArticles) =>
@@ -34,7 +45,7 @@ function useGuardianArticles({
         setPage(page + 1);
       })
       .catch((error) => console.error(error));
-  }, [sectionId, page, shouldFetch, pageSize]);
+  }, [sectionId, page, shouldFetch, pageSize, rejectListedSectionIds]);
 
   return [articles, fetchMore];
 }

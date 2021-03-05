@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 import ArticlesList from '../components/ArticlesList';
 
-function SectionScreen() {
+function SectionArticlesScreen() {
   const route = useRoute();
 
   return (
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SectionScreen;
+export default SectionArticlesScreen;

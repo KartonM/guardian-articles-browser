@@ -20,7 +20,7 @@ const HorizontalArticlesList = ({section}) => {
       <Card style={styles.moreArticlesCard}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Section', {section: section});
+            navigation.navigate('SectionArticles', {section: section});
           }}>
           <Text style={styles.moreArticlesMain}>More...</Text>
           <Text style={styles.moreArticlesSecondary}>
