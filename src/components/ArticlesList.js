@@ -4,6 +4,7 @@ import {FlatList, View, Text, StyleSheet} from 'react-native';
 import useGuardianArticles from '../hooks/useGuardianArticles';
 import HorizontalArticlesList from './HorizontalArticlesList';
 import ArticleCard from './ArticleCard';
+import {useSelector} from 'react-redux';
 
 const ListItemType = Object.freeze({section: 1, header: 2, article: 3});
 
@@ -15,6 +16,9 @@ const ArticlesList = ({
     pageSize: 10,
     sectionId: mainSection.id,
     initArticles: [null, null, null],
+    rejectListedSectionIds: useSelector((state) =>
+      state.sections.filter((s) => !s.isVisible).map((s) => s.id),
+    ),
   });
 
   const sectionListItems = sections.map((section) => {

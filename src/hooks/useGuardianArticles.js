@@ -4,6 +4,7 @@ function useGuardianArticles({
   sectionId = '',
   pageSize = 10,
   initArticles = [],
+  rejectListedSectionIds = [],
 } = {}) {
   const [page, setPage] = useState(1);
   const [shouldFetch, setShouldFetch] = useState(true);
@@ -14,14 +15,19 @@ function useGuardianArticles({
   useEffect(() => {
     setPage(1);
     setShouldFetch(true);
-  }, [sectionId]);
+  }, [sectionId, rejectListedSectionIds]);
 
   useEffect(() => {
     if (!shouldFetch || pageSize <= 0) {
       return;
     }
 
-    const sectionQuery = sectionId ? `&section=${sectionId}` : '';
+    const sectionQuery = sectionId
+      ? `&section=${sectionId}`
+      : rejectListedSectionIds.length > 0
+      ? `&section=-${rejectListedSectionIds.join(',-')}`
+      : '';
+
     fetch(
       `https://content.guardianapis.com/search?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8&page-size=${pageSize}${sectionQuery}&page=${page}&show-fields=headline,trailText,thumbnail,firstPublicationDate`,
     )
