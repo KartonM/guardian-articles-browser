@@ -15,7 +15,7 @@ function useGuardianArticles({
   useEffect(() => {
     setPage(1);
     setShouldFetch(true);
-  }, [sectionId, rejectListedSectionIds]);
+  }, [sectionId]);
 
   useEffect(() => {
     if (!shouldFetch || pageSize <= 0) {
@@ -29,7 +29,7 @@ function useGuardianArticles({
       : '';
 
     fetch(
-      `https://content.guardianapis.com/search?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8&page-size=${pageSize}${sectionQuery}&page=${page}&show-fields=headline,trailText,thumbnail,firstPublicationDate,body`,
+      `https://content.guardianapis.com/search?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8&page-size=${pageSize}${sectionQuery}&page=${page}&show-fields=headline,trailText,thumbnail,firstPublicationDate,bodyText`,
     )
       .then((response) => response.json())
       .then((json) => {
