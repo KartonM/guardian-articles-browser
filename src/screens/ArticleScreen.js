@@ -10,34 +10,52 @@ import {
 import {useRoute} from '@react-navigation/native';
 import {WebView} from 'react-native-webview';
 import {Ionicons} from '@expo/vector-icons';
+import {useSelector, useDispatch} from 'react-redux';
+import {bookmarkArticle, unbookmarkArticle} from '../redux/reducer';
 
-function ArticleScreen({navigation}) {
+function ArticleScreen() {
   const route = useRoute();
+  const article = route.params.article;
+  const isBookmarked = useSelector((state) =>
+    state.bookmarkedArticles.some(
+      (bookmarkedArticle) => bookmarkedArticle.id === article.id,
+    ),
+  );
+  const dispatch = useDispatch();
   return (
     <>
       <ScrollView style={styles.container}>
         {/*<WebView*/}
         {/*  originWhitelist={['*']}*/}
         {/*  source={{*/}
-        {/*    html: addCSSStyles(route.params.article.body),*/}
+        {/*    html: addCSSStyles(article.body),*/}
         {/*  }}*/}
         {/*/>*/}
-        <Text style={styles.title}>{route.params.article.headline}</Text>
-        <TouchableOpacity onPress={() => {}} style={styles.bookmark}>
-          <Ionicons color="blue" size={48} name={'md-bookmark-outline'} />
+        <Text style={styles.title}>{article.headline}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(
+              isBookmarked
+                ? unbookmarkArticle(article.id)
+                : bookmarkArticle(article),
+            );
+          }}
+          style={styles.bookmark}>
+          <Ionicons
+            color="blue"
+            size={42}
+            name={isBookmarked ? 'md-bookmark' : 'md-bookmark-outline'}
+          />
         </TouchableOpacity>
         <Text style={styles.publicationDate}>
           {new Date(
-            Date.parse(route.params.article.firstPublicationDate),
+            Date.parse(article.firstPublicationDate),
           ).toLocaleDateString()}
         </Text>
         <View style={styles.divider} />
-        <Text style={styles.standFirst}>{route.params.article.trailText}</Text>
-        <Image
-          source={{uri: route.params.article.thumbnail}}
-          style={styles.thumbnail}
-        />
-        <Text style={styles.body}>{route.params.article.bodyText}</Text>
+        <Text style={styles.standFirst}>{article.trailText}</Text>
+        <Image source={{uri: article.thumbnail}} style={styles.thumbnail} />
+        <Text style={styles.body}>{article.bodyText}</Text>
       </ScrollView>
     </>
   );
@@ -97,7 +115,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 32,
+    marginTop: 36,
   },
   publicationDate: {
     fontSize: 16,
