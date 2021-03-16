@@ -4,8 +4,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useState} from 'react';
 import {Ionicons} from '@expo/vector-icons';
 import {setSections as setPersistedSections} from '../redux/reducer';
+import useTheme from '../hooks/useTheme';
 
 function SectionsScreen() {
+  const [theme] = useTheme();
   const persistedSections = useSelector((state) => state.sections);
 
   const [sections, setSections] = useState(persistedSections);
@@ -36,19 +38,23 @@ function SectionsScreen() {
           return {id: s.id, name: s.webTitle};
         });
         console.log(fetchedSections);
+        sections.push(...fetchedSections);
         setSections(fetchedSections);
       });
   }, [sections, dispatch]);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, {backgroundColor: theme.colors.background}]}>
       <FlatList
         data={sections}
         contentContainerStyle={styles.listContentContainer}
         keyExtractor={(item) => item.id}
         renderItem={({item, index}) => (
           <View style={styles.sectionContainer}>
-            <Text style={styles.sectionName}>{item.name}</Text>
+            <Text style={[styles.sectionName, {color: theme.colors.text}]}>
+              {item.name}
+            </Text>
             <View style={styles.iconsContainer}>
               <TouchableOpacity
                 onPress={() => {
@@ -56,7 +62,7 @@ function SectionsScreen() {
                   setSections([...sections]);
                 }}>
                 <Ionicons
-                  color="gray"
+                  color={theme.colors.secondaryText}
                   size={30}
                   name={item.isVisible ? 'md-eye' : 'md-eye-off'}
                 />
@@ -84,7 +90,6 @@ function SectionsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     paddingTop: 32,
   },
   listContentContainer: {

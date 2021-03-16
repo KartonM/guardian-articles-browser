@@ -1,16 +1,28 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import useTheme from '../hooks/useTheme';
 
 function ProfileScreen({navigation}) {
+  const [theme] = useTheme();
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, {backgroundColor: theme.colors.background}]}>
       <TouchableOpacity
         onPress={() => navigation.navigate('BookmarkedArticles')}>
-        <Text style={styles.menuItem}>Bookmarked articles</Text>
+        <Text style={[styles.menuItem, {color: theme.colors.text}]}>
+          Bookmarked articles
+        </Text>
       </TouchableOpacity>
-      <View style={styles.divider} />
+      <View
+        style={[
+          styles.divider,
+          {borderBottomColor: theme.colors.secondaryText},
+        ]}
+      />
       <TouchableOpacity onPress={() => navigation.navigate('Sections')}>
-        <Text style={styles.menuItem}>Sections</Text>
+        <Text style={[styles.menuItem, {color: theme.colors.text}]}>
+          Sections
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -19,7 +31,6 @@ function ProfileScreen({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     paddingTop: 48,
   },
   menuItem: {
@@ -30,7 +41,6 @@ const styles = StyleSheet.create({
   divider: {
     borderWidth: 0.3,
     marginHorizontal: 16,
-    borderBottomColor: 'gray',
   },
 });
 

@@ -41,15 +41,25 @@ function ArticleScreen() {
           name={isBookmarked ? 'md-bookmark' : 'md-bookmark-outline'}
         />
       </TouchableOpacity>
-      <Text style={styles.publicationDate}>
+      <Text
+        style={[styles.publicationDate, {color: theme.colors.secondaryText}]}>
         {new Date(
           Date.parse(article.firstPublicationDate),
         ).toLocaleDateString()}
       </Text>
-      <View style={styles.divider} />
-      <Text style={styles.standFirst}>{article.trailText}</Text>
+      <View
+        style={[
+          styles.divider,
+          {borderBottomColor: theme.colors.secondaryText},
+        ]}
+      />
+      <Text style={[styles.standFirst, {color: theme.colors.text}]}>
+        {article.trailText}
+      </Text>
       <Image source={{uri: article.thumbnail}} style={styles.thumbnail} />
-      <Text style={styles.body}>{article.bodyText}</Text>
+      <Text style={[styles.body, {color: theme.colors.text}]}>
+        {article.bodyText}
+      </Text>
     </ScrollView>
   );
 }
