@@ -10,17 +10,14 @@ import {
 import {useRoute} from '@react-navigation/native';
 import {WebView} from 'react-native-webview';
 import {Ionicons} from '@expo/vector-icons';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {bookmarkArticle, unbookmarkArticle} from '../redux/reducer';
+import useIsBookmarked from '../hooks/useIsBookmarked';
 
 function ArticleScreen() {
   const route = useRoute();
   const article = route.params.article;
-  const isBookmarked = useSelector((state) =>
-    state.bookmarkedArticles.some(
-      (bookmarkedArticle) => bookmarkedArticle.id === article.id,
-    ),
-  );
+  const isBookmarked = useIsBookmarked(article);
   const dispatch = useDispatch();
   return (
     <>
@@ -133,8 +130,10 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   body: {
-    fontSize: 14,
+    fontSize: 15,
+    lineHeight: 21,
     marginTop: 6,
+    textAlign: 'justify',
   },
   thumbnail: {
     width: '100%',

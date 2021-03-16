@@ -3,9 +3,15 @@ import {Text, StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import {Card} from 'native-base';
 import SkeletonContent from 'react-native-skeleton-content';
 import {useNavigation} from '@react-navigation/native';
+import useIsBookmarked from '../hooks/useIsBookmarked';
+import {unbookmarkArticle} from '../redux/reducer';
+import {Ionicons} from '@expo/vector-icons';
+import {useDispatch} from 'react-redux';
 
 function ArticleCard({article}) {
   const navigation = useNavigation();
+  const isBookmarked = useIsBookmarked(article);
+  const dispatch = useDispatch();
 
   return (
     <Card style={styles.card}>
@@ -42,6 +48,19 @@ function ArticleCard({article}) {
           <Text style={styles.trailText}>{article?.trailText}</Text>
         </SkeletonContent>
       </TouchableOpacity>
+      {isBookmarked && (
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(unbookmarkArticle(article?.id));
+          }}
+          style={styles.bookmark}>
+          <Ionicons
+            color="#0000ffcf"
+            size={42}
+            name={isBookmarked ? 'md-bookmark' : 'md-bookmark-outline'}
+          />
+        </TouchableOpacity>
+      )}
     </Card>
   );
 }
@@ -53,6 +72,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingBottom: 16,
     alignSelf: 'center',
+  },
+  bookmark: {
+    position: 'absolute',
+    top: -4,
+    right: 8,
   },
   thumbnail: {
     height: 200,
