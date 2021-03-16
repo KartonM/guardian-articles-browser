@@ -11,9 +11,10 @@ const ListItemType = Object.freeze({section: 1, header: 2, article: 3});
 const ArticlesList = ({
   sections = [],
   mainSection = {id: '', name: 'All articles'},
+  allArticles = undefined,
 }) => {
-  const [articles, fetchMore] = useGuardianArticles({
-    pageSize: 10,
+  const [fetchedArticles, fetchMore] = useGuardianArticles({
+    pageSize: allArticles ? 0 : 10,
     sectionId: mainSection.id,
     initArticles: [null, null, null],
     rejectListedSectionIds: useSelector((state) =>
@@ -30,7 +31,7 @@ const ArticlesList = ({
     header: mainSection.name,
   };
 
-  const articleListItems = articles.map((article) => {
+  const articleListItems = (allArticles ?? fetchedArticles).map((article) => {
     return {itemType: ListItemType.article, article: article};
   });
 
