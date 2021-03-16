@@ -4,7 +4,8 @@ import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 function ProfileScreen({navigation}) {
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('BookmarkedArticles')}>
         <Text style={styles.menuItem}>Bookmarked articles</Text>
       </TouchableOpacity>
       <View style={styles.divider} />

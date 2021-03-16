@@ -1,41 +1,66 @@
 import React from 'react';
-import {Text, StyleSheet, View, Image} from 'react-native';
+import {Text, StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import {Card} from 'native-base';
 import SkeletonContent from 'react-native-skeleton-content';
+import {useNavigation} from '@react-navigation/native';
+import useIsBookmarked from '../hooks/useIsBookmarked';
+import {unbookmarkArticle} from '../redux/reducer';
+import {Ionicons} from '@expo/vector-icons';
+import {useDispatch} from 'react-redux';
 
 function ArticleCard({article}) {
+  const navigation = useNavigation();
+  const isBookmarked = useIsBookmarked(article);
+  const dispatch = useDispatch();
+
   return (
     <Card style={styles.card}>
-      <SkeletonContent isLoading={!article} containerStyle={styles.thumbnail}>
-        <Image source={{uri: article?.thumbnail}} style={styles.thumbnail} />
-      </SkeletonContent>
-      <SkeletonContent
-        containerStyle={styles.textContainer}
-        isLoading={!article}
-        layout={[
-          {key: 'line1', width: '100%', height: 16},
-          {key: 'line2', width: '80%', height: 16, marginTop: 4},
-          {key: 'line3', width: 72, height: 14, marginTop: 14},
-        ]}>
-        <Text style={styles.headline}>{article?.headline}</Text>
-        <Text style={styles.publicationDate}>
-          {article &&
-            new Date(
-              Date.parse(article.firstPublicationDate),
-            ).toLocaleDateString()}
-        </Text>
-      </SkeletonContent>
-      <View style={styles.divider} />
-      <SkeletonContent
-        containerStyle={styles.textContainer}
-        isLoading={!article}
-        layout={[
-          {key: 'line1', width: '100%', height: 16},
-          {key: 'line2', width: '100%', height: 16, marginTop: 4},
-          {key: 'line3', width: '30%', height: 16, marginTop: 4},
-        ]}>
-        <Text style={styles.trailText}>{article?.trailText}</Text>
-      </SkeletonContent>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Article', {article: article})}>
+        <SkeletonContent isLoading={!article} containerStyle={styles.thumbnail}>
+          <Image source={{uri: article?.thumbnail}} style={styles.thumbnail} />
+        </SkeletonContent>
+        <SkeletonContent
+          containerStyle={styles.textContainer}
+          isLoading={!article}
+          layout={[
+            {key: 'line1', width: '100%', height: 16},
+            {key: 'line2', width: '80%', height: 16, marginTop: 4},
+            {key: 'line3', width: 72, height: 14, marginTop: 14},
+          ]}>
+          <Text style={styles.headline}>{article?.headline}</Text>
+          <Text style={styles.publicationDate}>
+            {article &&
+              new Date(
+                Date.parse(article.firstPublicationDate),
+              ).toLocaleDateString()}
+          </Text>
+        </SkeletonContent>
+        <View style={styles.divider} />
+        <SkeletonContent
+          containerStyle={styles.textContainer}
+          isLoading={!article}
+          layout={[
+            {key: 'line1', width: '100%', height: 16},
+            {key: 'line2', width: '100%', height: 16, marginTop: 4},
+            {key: 'line3', width: '30%', height: 16, marginTop: 4},
+          ]}>
+          <Text style={styles.trailText}>{article?.trailText}</Text>
+        </SkeletonContent>
+      </TouchableOpacity>
+      {isBookmarked && (
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(unbookmarkArticle(article?.id));
+          }}
+          style={styles.bookmark}>
+          <Ionicons
+            color="#0000ffcf"
+            size={42}
+            name={isBookmarked ? 'md-bookmark' : 'md-bookmark-outline'}
+          />
+        </TouchableOpacity>
+      )}
     </Card>
   );
 }
@@ -47,6 +72,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingBottom: 16,
     alignSelf: 'center',
+  },
+  bookmark: {
+    position: 'absolute',
+    top: -4,
+    right: 8,
   },
   thumbnail: {
     height: 200,
