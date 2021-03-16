@@ -7,14 +7,16 @@ import useIsBookmarked from '../hooks/useIsBookmarked';
 import {unbookmarkArticle} from '../redux/reducer';
 import {Ionicons} from '@expo/vector-icons';
 import {useDispatch} from 'react-redux';
+import useTheme from '../hooks/useTheme';
 
 function ArticleCard({article}) {
+  const [theme] = useTheme();
   const navigation = useNavigation();
   const isBookmarked = useIsBookmarked(article);
   const dispatch = useDispatch();
 
   return (
-    <Card style={styles.card}>
+    <Card style={[styles.card, {backgroundColor: theme.colors.card}]}>
       <TouchableOpacity
         onPress={() => navigation.navigate('Article', {article: article})}>
         <SkeletonContent isLoading={!article} containerStyle={styles.thumbnail}>
@@ -28,15 +30,23 @@ function ArticleCard({article}) {
             {key: 'line2', width: '80%', height: 16, marginTop: 4},
             {key: 'line3', width: 72, height: 14, marginTop: 14},
           ]}>
-          <Text style={styles.headline}>{article?.headline}</Text>
-          <Text style={styles.publicationDate}>
+          <Text style={[styles.headline, {color: theme.colors.text}]}>
+            {article?.headline}
+          </Text>
+          <Text
+            style={[
+              styles.publicationDate,
+              {color: theme.colors.secondaryText},
+            ]}>
             {article &&
               new Date(
                 Date.parse(article.firstPublicationDate),
               ).toLocaleDateString()}
           </Text>
         </SkeletonContent>
-        <View style={styles.divider} />
+        <View
+          style={[styles.divider, {borderBottomColor: theme.colors.text}]}
+        />
         <SkeletonContent
           containerStyle={styles.textContainer}
           isLoading={!article}
@@ -45,7 +55,9 @@ function ArticleCard({article}) {
             {key: 'line2', width: '100%', height: 16, marginTop: 4},
             {key: 'line3', width: '30%', height: 16, marginTop: 4},
           ]}>
-          <Text style={styles.trailText}>{article?.trailText}</Text>
+          <Text style={[styles.trailText, {color: theme.colors.text}]}>
+            {article?.trailText}
+          </Text>
         </SkeletonContent>
       </TouchableOpacity>
       {isBookmarked && (
@@ -98,16 +110,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   divider: {
-    borderBottomColor: 'black',
     borderWidth: 1,
     marginHorizontal: 16,
     width: '12%',
-    top: 4,
+    marginTop: 4,
   },
   publicationDate: {
     fontSize: 14,
     marginTop: 10,
-    color: 'gray',
   },
   trailText: {
     fontSize: 16,
@@ -115,7 +125,7 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 0,
     marginHorizontal: 16,
-    marginTop: 10,
+    marginTop: 8,
   },
 });
 

@@ -12,15 +12,20 @@ import {Ionicons} from '@expo/vector-icons';
 import {useDispatch} from 'react-redux';
 import {bookmarkArticle, unbookmarkArticle} from '../redux/reducer';
 import useIsBookmarked from '../hooks/useIsBookmarked';
+import useTheme from '../hooks/useTheme';
 
 function ArticleScreen() {
+  const [theme] = useTheme();
   const route = useRoute();
   const article = route.params.article;
   const isBookmarked = useIsBookmarked(article);
   const dispatch = useDispatch();
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>{article.headline}</Text>
+    <ScrollView
+      style={[styles.container, {backgroundColor: theme.colors.background}]}>
+      <Text style={[styles.title, {color: theme.colors.text}]}>
+        {article.headline}
+      </Text>
       <TouchableOpacity
         onPress={() => {
           dispatch(
@@ -52,7 +57,6 @@ function ArticleScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     padding: 16,
     paddingTop: 32,
   },
@@ -67,10 +71,8 @@ const styles = StyleSheet.create({
   },
   publicationDate: {
     fontSize: 16,
-    color: 'gray',
   },
   divider: {
-    borderBottomColor: 'black',
     borderWidth: 1,
     width: '12%',
     marginTop: 4,
@@ -78,7 +80,6 @@ const styles = StyleSheet.create({
   standFirst: {
     fontSize: 18,
     marginTop: 8,
-    color: 'black',
   },
   body: {
     fontSize: 15,

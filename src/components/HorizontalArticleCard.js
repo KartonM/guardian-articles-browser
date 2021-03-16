@@ -14,13 +14,15 @@ import {unbookmarkArticle} from '../redux/reducer';
 import {Ionicons} from '@expo/vector-icons';
 import useIsBookmarked from '../hooks/useIsBookmarked';
 import {useDispatch} from 'react-redux';
+import useTheme from '../hooks/useTheme';
 
 function HorizontalArticleCard({article}) {
+  const [theme] = useTheme();
   const navigation = useNavigation();
   const isBookmarked = useIsBookmarked(article);
   const dispatch = useDispatch();
   return (
-    <Card style={styles.card}>
+    <Card style={[styles.card, {backgroundColor: theme.colors.card}]}>
       <TouchableOpacity
         style={styles.cardContentContainer}
         onPress={() => navigation.navigate('Article', {article: article})}>
@@ -36,18 +38,24 @@ function HorizontalArticleCard({article}) {
               {key: 'line2', width: '80%', height: 16, marginTop: 4},
             ]}>
             <Text
-              style={styles.headline}
+              style={[styles.headline, {color: theme.colors.text}]}
               numberOfLines={4}
               ellipsizeMode="tail">
               {article?.headline}
             </Text>
           </SkeletonContent>
-          <View style={styles.divider} />
+          <View
+            style={[styles.divider, {borderBottomColor: theme.colors.text}]}
+          />
           <SkeletonContent
             containerStyle={[styles.flex0, styles.publicationDateContainer]}
             isLoading={!article}
             layout={[{key: 'line1', width: 72, height: 14}]}>
-            <Text style={styles.publicationDate}>
+            <Text
+              style={[
+                styles.publicationDate,
+                {color: theme.colors.secondaryText},
+              ]}>
               {article &&
                 new Date(
                   Date.parse(article.firstPublicationDate),
@@ -106,7 +114,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   divider: {
-    borderBottomColor: 'black',
     borderWidth: 1,
     width: '12%',
     top: 4,
