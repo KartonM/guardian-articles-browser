@@ -1,9 +1,10 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import ArticlesList from '../components/ArticlesList';
 import {Ionicons} from '@expo/vector-icons';
 import {useSelector} from 'react-redux';
 import useTheme from '../hooks/useTheme';
+import {logoDark, logoDefault} from '../image';
 
 function HomeScreen({navigation}) {
   const [theme] = useTheme();
@@ -14,7 +15,13 @@ function HomeScreen({navigation}) {
     <View
       style={[styles.container, {backgroundColor: theme.colors.background}]}>
       <View style={[styles.topBar, {backgroundColor: theme.colors.card}]}>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <Image
+          source={theme.dark ? logoDark : logoDefault}
+          style={styles.logo}
+        />
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Profile')}
+          style={styles.profileIconContainer}>
           <Ionicons
             style={styles.profileIcon}
             name={'person'}
@@ -34,13 +41,29 @@ const styles = StyleSheet.create({
   },
   topBar: {
     elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
     paddingTop: 32,
-    paddingBottom: 4,
+    paddingBottom: 8,
+  },
+  profileIconContainer: {
+    position: 'absolute',
+    right: 8,
+    top: 36,
   },
   profileIcon: {
-    alignSelf: 'flex-end',
     padding: 4,
     paddingHorizontal: 8,
+  },
+  logo: {
+    alignSelf: 'center',
+    width: 148,
+    height: 49,
   },
 });
 
