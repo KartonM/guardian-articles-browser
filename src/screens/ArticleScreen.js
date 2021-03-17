@@ -36,7 +36,7 @@ function ArticleScreen() {
         }}
         style={styles.bookmark}>
         <Ionicons
-          color="blue"
+          color={theme.colors.bookmarkColor}
           size={42}
           name={isBookmarked ? 'md-bookmark' : 'md-bookmark-outline'}
         />
@@ -67,8 +67,7 @@ function ArticleScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    paddingTop: 32,
+    paddingHorizontal: 16,
   },
   bookmark: {
     position: 'absolute',

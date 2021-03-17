@@ -90,7 +90,6 @@ function SectionsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 32,
   },
   listContentContainer: {
     paddingVertical: 12,

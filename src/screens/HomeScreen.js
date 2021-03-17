@@ -1,5 +1,11 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  StatusBar,
+} from 'react-native';
 import ArticlesList from '../components/ArticlesList';
 import {Ionicons} from '@expo/vector-icons';
 import {useSelector} from 'react-redux';
@@ -14,7 +20,18 @@ function HomeScreen({navigation}) {
   return (
     <View
       style={[styles.container, {backgroundColor: theme.colors.background}]}>
-      <View style={[styles.topBar, {backgroundColor: theme.colors.card}]}>
+      <StatusBar
+        backgroundColor={theme.colors.card}
+        barStyle={theme.dark ? 'light-content' : 'dark-content'}
+      />
+      <View
+        style={[
+          styles.topBar,
+          {
+            backgroundColor: theme.colors.card,
+            shadowColor: theme.colors.text,
+          },
+        ]}>
         <Image
           source={theme.dark ? logoDark : logoDefault}
           style={styles.logo}
@@ -41,20 +58,18 @@ const styles = StyleSheet.create({
   },
   topBar: {
     elevation: 2,
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
-    paddingTop: 32,
-    paddingBottom: 8,
+    paddingVertical: 8,
   },
   profileIconContainer: {
     position: 'absolute',
     right: 8,
-    top: 36,
+    top: 12,
   },
   profileIcon: {
     padding: 4,

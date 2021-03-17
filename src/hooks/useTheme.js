@@ -8,7 +8,10 @@ const MyDefaultTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    secondaryText: 'green',
+    secondaryText: 'gray',
+    bookmarkColor: '#00558Bdf',
+    boneColor: '#E1E9EE',
+    boneHighlightColor: '#f7fcff',
   },
 };
 
@@ -16,7 +19,10 @@ const MyDarkTheme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    secondaryText: 'red',
+    secondaryText: 'lightgray',
+    bookmarkColor: '#00558Bdf',
+    boneColor: '#1c1d1e',
+    boneHighlightColor: '#212223',
   },
 };
 
@@ -31,15 +37,11 @@ function useTheme() {
     }
   }, [isDark, dispatch, scheme]);
 
-  const setDarkMode = useCallback(
-    (arg) => {
-      console.log(arg);
-      dispatch(setPersistedDarkMode(arg));
-    },
-    [dispatch],
-  );
+  const toggleDarkMode = useCallback(() => {
+    dispatch(setPersistedDarkMode(!isDark));
+  }, [dispatch, isDark]);
 
-  return [isDark ? MyDarkTheme : MyDefaultTheme, setDarkMode];
+  return [isDark ? MyDarkTheme : MyDefaultTheme, toggleDarkMode];
 }
 
 export default useTheme;

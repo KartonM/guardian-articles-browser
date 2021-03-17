@@ -26,11 +26,17 @@ function HorizontalArticleCard({article}) {
       <TouchableOpacity
         style={styles.cardContentContainer}
         onPress={() => navigation.navigate('Article', {article: article})}>
-        <SkeletonContent isLoading={!article} containerStyle={styles.thumbnail}>
+        <SkeletonContent
+          boneColor={theme.colors.boneColor}
+          highlightColor={theme.colors.boneHighlightColor}
+          isLoading={!article}
+          containerStyle={styles.thumbnail}>
           <Image source={{uri: article?.thumbnail}} style={styles.thumbnail} />
         </SkeletonContent>
         <View style={styles.titleContainer}>
           <SkeletonContent
+            boneColor={theme.colors.boneColor}
+            highlightColor={theme.colors.boneHighlightColor}
             containerStyle={styles.flex0}
             isLoading={!article}
             layout={[
@@ -48,6 +54,8 @@ function HorizontalArticleCard({article}) {
             style={[styles.divider, {borderBottomColor: theme.colors.text}]}
           />
           <SkeletonContent
+            boneColor={theme.colors.boneColor}
+            highlightColor={theme.colors.boneHighlightColor}
             containerStyle={[styles.flex0, styles.publicationDateContainer]}
             isLoading={!article}
             layout={[{key: 'line1', width: 72, height: 14}]}>
@@ -71,7 +79,7 @@ function HorizontalArticleCard({article}) {
           }}
           style={styles.bookmark}>
           <Ionicons
-            color="#0000ffcf"
+            color={theme.colors.bookmarkColor}
             size={36}
             name={isBookmarked ? 'md-bookmark' : 'md-bookmark-outline'}
           />
