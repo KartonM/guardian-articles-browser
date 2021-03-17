@@ -13,6 +13,7 @@ import {useDispatch} from 'react-redux';
 import {bookmarkArticle, unbookmarkArticle} from '../redux/reducer';
 import useIsBookmarked from '../hooks/useIsBookmarked';
 import useTheme from '../hooks/useTheme';
+import {removeStrongTags} from '../utils/text';
 
 function ArticleScreen() {
   const [theme] = useTheme();
@@ -54,7 +55,7 @@ function ArticleScreen() {
         ]}
       />
       <Text style={[styles.standFirst, {color: theme.colors.text}]}>
-        {article.trailText}
+        {removeStrongTags(article.trailText)}
       </Text>
       <Image source={{uri: article.thumbnail}} style={styles.thumbnail} />
       <Text style={[styles.body, {color: theme.colors.text}]}>

@@ -8,6 +8,7 @@ import {unbookmarkArticle} from '../redux/reducer';
 import {Ionicons} from '@expo/vector-icons';
 import {useDispatch} from 'react-redux';
 import useTheme from '../hooks/useTheme';
+import {removeStrongTags} from '../utils/text';
 
 function ArticleCard({article}) {
   const [theme] = useTheme();
@@ -15,6 +16,7 @@ function ArticleCard({article}) {
   const isBookmarked = useIsBookmarked(article);
   const dispatch = useDispatch();
 
+  console.log(article?.trailText);
   return (
     <Card style={[styles.card, {backgroundColor: theme.colors.card}]}>
       <TouchableOpacity
@@ -64,7 +66,7 @@ function ArticleCard({article}) {
             {key: 'line3', width: '30%', height: 16, marginTop: 4},
           ]}>
           <Text style={[styles.trailText, {color: theme.colors.text}]}>
-            {article?.trailText}
+            {removeStrongTags(article?.trailText)}
           </Text>
         </SkeletonContent>
       </TouchableOpacity>
