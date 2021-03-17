@@ -14,6 +14,7 @@ import {bookmarkArticle, unbookmarkArticle} from '../redux/reducer';
 import useIsBookmarked from '../hooks/useIsBookmarked';
 import useTheme from '../hooks/useTheme';
 import {removeStrongTags} from '../utils/text';
+import TopBar from '../components/TopBar';
 
 function ArticleScreen() {
   const [theme] = useTheme();
@@ -22,46 +23,51 @@ function ArticleScreen() {
   const isBookmarked = useIsBookmarked(article);
   const dispatch = useDispatch();
   return (
-    <ScrollView
-      style={[styles.container, {backgroundColor: theme.colors.background}]}>
-      <Text style={[styles.title, {color: theme.colors.text}]}>
-        {article.headline}
-      </Text>
-      <TouchableOpacity
-        onPress={() => {
-          dispatch(
-            isBookmarked
-              ? unbookmarkArticle(article.id)
-              : bookmarkArticle(article),
-          );
-        }}
-        style={styles.bookmark}>
-        <Ionicons
-          color={theme.colors.bookmarkColor}
-          size={42}
-          name={isBookmarked ? 'md-bookmark' : 'md-bookmark-outline'}
+    <>
+      <TopBar>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(
+              isBookmarked
+                ? unbookmarkArticle(article.id)
+                : bookmarkArticle(article),
+            );
+          }}
+          style={styles.bookmark}>
+          <Ionicons
+            color={theme.colors.bookmarkColor}
+            size={42}
+            name={isBookmarked ? 'md-bookmark' : 'md-bookmark-outline'}
+          />
+        </TouchableOpacity>
+      </TopBar>
+      <ScrollView
+        style={[styles.container, {backgroundColor: theme.colors.background}]}>
+        <Text style={[styles.title, {color: theme.colors.text}]}>
+          {article.headline}
+        </Text>
+
+        <Text
+          style={[styles.publicationDate, {color: theme.colors.secondaryText}]}>
+          {new Date(
+            Date.parse(article.firstPublicationDate),
+          ).toLocaleDateString()}
+        </Text>
+        <View
+          style={[
+            styles.divider,
+            {borderBottomColor: theme.colors.secondaryText},
+          ]}
         />
-      </TouchableOpacity>
-      <Text
-        style={[styles.publicationDate, {color: theme.colors.secondaryText}]}>
-        {new Date(
-          Date.parse(article.firstPublicationDate),
-        ).toLocaleDateString()}
-      </Text>
-      <View
-        style={[
-          styles.divider,
-          {borderBottomColor: theme.colors.secondaryText},
-        ]}
-      />
-      <Text style={[styles.standFirst, {color: theme.colors.text}]}>
-        {removeStrongTags(article.trailText)}
-      </Text>
-      <Image source={{uri: article.thumbnail}} style={styles.thumbnail} />
-      <Text style={[styles.body, {color: theme.colors.text}]}>
-        {article.bodyText}
-      </Text>
-    </ScrollView>
+        <Text style={[styles.standFirst, {color: theme.colors.text}]}>
+          {removeStrongTags(article.trailText)}
+        </Text>
+        <Image source={{uri: article.thumbnail}} style={styles.thumbnail} />
+        <Text style={[styles.body, {color: theme.colors.text}]}>
+          {article.bodyText}
+        </Text>
+      </ScrollView>
+    </>
   );
 }
 
@@ -72,7 +78,8 @@ const styles = StyleSheet.create({
   },
   bookmark: {
     position: 'absolute',
-    right: 0,
+    right: 16,
+    top: 4,
   },
   title: {
     fontSize: 24,

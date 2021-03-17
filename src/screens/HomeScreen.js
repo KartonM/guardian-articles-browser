@@ -11,6 +11,7 @@ import {Ionicons} from '@expo/vector-icons';
 import {useSelector} from 'react-redux';
 import useTheme from '../hooks/useTheme';
 import {logoDark, logoDefault} from '../image';
+import TopBar from '../components/TopBar';
 
 function HomeScreen({navigation}) {
   const [theme] = useTheme();
@@ -24,14 +25,7 @@ function HomeScreen({navigation}) {
         backgroundColor={theme.colors.card}
         barStyle={theme.dark ? 'light-content' : 'dark-content'}
       />
-      <View
-        style={[
-          styles.topBar,
-          {
-            backgroundColor: theme.colors.card,
-            shadowColor: theme.colors.text,
-          },
-        ]}>
+      <TopBar withBackBtn={false}>
         <Image
           source={theme.dark ? logoDark : logoDefault}
           style={styles.logo}
@@ -46,7 +40,7 @@ function HomeScreen({navigation}) {
             color={theme.colors.text}
           />
         </TouchableOpacity>
-      </View>
+      </TopBar>
       <ArticlesList sections={followedSections} />
     </View>
   );
@@ -55,16 +49,6 @@ function HomeScreen({navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  topBar: {
-    elevation: 2,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    paddingVertical: 8,
   },
   profileIconContainer: {
     position: 'absolute',

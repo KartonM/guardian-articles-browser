@@ -5,6 +5,7 @@ import {useEffect, useState} from 'react';
 import {Ionicons} from '@expo/vector-icons';
 import {setSections as setPersistedSections} from '../redux/reducer';
 import useTheme from '../hooks/useTheme';
+import TopBar from '../components/TopBar';
 
 function SectionsScreen() {
   const [theme] = useTheme();
@@ -44,46 +45,49 @@ function SectionsScreen() {
   }, [sections, dispatch]);
 
   return (
-    <View
-      style={[styles.container, {backgroundColor: theme.colors.background}]}>
-      <FlatList
-        data={sections}
-        contentContainerStyle={styles.listContentContainer}
-        keyExtractor={(item) => item.id}
-        renderItem={({item, index}) => (
-          <View style={styles.sectionContainer}>
-            <Text style={[styles.sectionName, {color: theme.colors.text}]}>
-              {item.name}
-            </Text>
-            <View style={styles.iconsContainer}>
-              <TouchableOpacity
-                onPress={() => {
-                  sections[index].isVisible = !sections[index].isVisible;
-                  setSections([...sections]);
-                }}>
-                <Ionicons
-                  color={theme.colors.secondaryText}
-                  size={30}
-                  name={item.isVisible ? 'md-eye' : 'md-eye-off'}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  // dispatch(toggleSectionFollowed(item.id));
-                  sections[index].isFollowed = !sections[index].isFollowed;
-                  setSections([...sections]);
-                }}>
-                <Ionicons
-                  color="gold"
-                  size={30}
-                  name={item.isFollowed ? 'ios-star' : 'ios-star-outline'}
-                />
-              </TouchableOpacity>
+    <>
+      <TopBar />
+      <View
+        style={[styles.container, {backgroundColor: theme.colors.background}]}>
+        <FlatList
+          data={sections}
+          contentContainerStyle={styles.listContentContainer}
+          keyExtractor={(item) => item.id}
+          renderItem={({item, index}) => (
+            <View style={styles.sectionContainer}>
+              <Text style={[styles.sectionName, {color: theme.colors.text}]}>
+                {item.name}
+              </Text>
+              <View style={styles.iconsContainer}>
+                <TouchableOpacity
+                  onPress={() => {
+                    sections[index].isVisible = !sections[index].isVisible;
+                    setSections([...sections]);
+                  }}>
+                  <Ionicons
+                    color={theme.colors.secondaryText}
+                    size={30}
+                    name={item.isVisible ? 'md-eye' : 'md-eye-off'}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    // dispatch(toggleSectionFollowed(item.id));
+                    sections[index].isFollowed = !sections[index].isFollowed;
+                    setSections([...sections]);
+                  }}>
+                  <Ionicons
+                    color="gold"
+                    size={30}
+                    name={item.isFollowed ? 'ios-star' : 'ios-star-outline'}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        )}
-      />
-    </View>
+          )}
+        />
+      </View>
+    </>
   );
 }
 
