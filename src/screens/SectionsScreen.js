@@ -1,5 +1,13 @@
 import React from 'react';
-import {StyleSheet, View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+  BackHandler,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useState} from 'react';
 import {Ionicons} from '@expo/vector-icons';
@@ -29,18 +37,42 @@ function SectionsScreen() {
       return;
     }
 
+    const handleFetchError = (errorMsg) => {
+      Alert.alert(
+        'Error',
+        errorMsg,
+        [
+          {
+            text: 'Exit',
+            onPress: () => {
+              BackHandler.exitApp();
+            },
+          },
+        ],
+        {cancelable: false},
+      );
+    };
+
     fetch(
       'https://content.guardianapis.com/sections?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8',
     )
       .then((response) => response.json())
       .then((json) => {
         console.log(json);
+        if (!json?.response) {
+          handleFetchError(json?.message);
+          return;
+        }
         const fetchedSections = json.response.results.map((s) => {
           return {id: s.id, name: s.webTitle};
         });
         console.log(fetchedSections);
         sections.push(...fetchedSections);
         setSections(fetchedSections);
+      })
+      .catch((error) => {
+        console.error(error);
+        handleFetchError(error.message);
       });
   }, [sections, dispatch]);
 

@@ -1,6 +1,13 @@
 import React from 'react';
 
-import {FlatList, View, Text, StyleSheet} from 'react-native';
+import {
+  FlatList,
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  BackHandler,
+} from 'react-native';
 import useGuardianArticles from '../hooks/useGuardianArticles';
 import HorizontalArticlesList from './HorizontalArticlesList';
 import ArticleCard from './ArticleCard';
@@ -22,6 +29,21 @@ const ArticlesList = ({
     rejectListedSectionIds: useSelector((state) =>
       state.sections.filter((s) => !s.isVisible).map((s) => s.id),
     ),
+    onError: (errorMsg) => {
+      Alert.alert(
+        'Error',
+        errorMsg,
+        [
+          {
+            text: 'Exit',
+            onPress: () => {
+              BackHandler.exitApp();
+            },
+          },
+        ],
+        {cancelable: false},
+      );
+    },
   });
 
   const sectionListItems = sections.map((section) => {
