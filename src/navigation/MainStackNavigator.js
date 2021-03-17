@@ -2,6 +2,11 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import HomeScreen from '../screens/HomeScreen';
+import SectionArticlesScreen from '../screens/SectionArticlesScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import SectionsScreen from '../screens/SectionsScreen';
+import ArticleScreen from '../screens/ArticleScreen';
+import BookmarkedArticlesScreen from '../screens/BookmarkedArticlesScreen';
 
 const Stack = createStackNavigator();
 
@@ -10,6 +15,17 @@ function MainStackNavigator() {
     <NavigationContainer>
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen
+          name="SectionArticles"
+          component={SectionArticlesScreen}
+        />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Sections" component={SectionsScreen} />
+        <Stack.Screen name="Article" component={ArticleScreen} />
+        <Stack.Screen
+          name="BookmarkedArticles"
+          component={BookmarkedArticlesScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

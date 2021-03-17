@@ -5,11 +5,12 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "expo start",
     "test": "jest",
     "lint": "eslint ."
   },
   "dependencies": {
+    "@expo/vector-icons": "^12.0.3",
     "@react-native-async-storage/async-storage": "^1.14.1",
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",
@@ -17,8 +18,11 @@
     "native-base": "^2.15.2",
     "react": "16.13.1",
     "react-native": "0.63.4",
+    "react-native-appearance": "~0.3.3",
     "react-native-cardview": "^2.0.5",
     "react-native-gesture-handler": "^1.10.2",
+    "react-native-skeleton-content": "^1.0.20",
+    "react-native-webview": "^11.2.3",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0"

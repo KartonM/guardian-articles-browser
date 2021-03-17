@@ -1,22 +1,47 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import HorizontalArticleCard from '../components/HorizontalArticleCard';
-import HorizontalArticlesList from '../components/HorizontalArticlesList';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  StatusBar,
+} from 'react-native';
+import ArticlesList from '../components/ArticlesList';
+import {Ionicons} from '@expo/vector-icons';
+import {useSelector} from 'react-redux';
+import useTheme from '../hooks/useTheme';
+import {logoDark, logoDefault} from '../image';
+import TopBar from '../components/TopBar';
 
-function HomeScreen() {
+function HomeScreen({navigation}) {
+  const [theme] = useTheme();
+  const followedSections = useSelector((state) =>
+    state.sections.filter((section) => section.isFollowed),
+  );
   return (
-    <View style={styles.container}>
-      {/*<HorizontalArticleCard*/}
-      {/*  article={{*/}
-      {/*    title:*/}
-      {/*      'React Native still has the concept of style inheritance, but limited to text subtrees. In this case',*/}
-      {/*    // 'dupa',*/}
-      {/*    thumbnail:*/}
-      {/*      'https://media.guim.co.uk/4f53091cef6238123052c5a2329a8e067b840fa6/0_173_5190_3114/500.jpg',*/}
-      {/*    publicationDate: '28.01',*/}
-      {/*  }}*/}
-      {/*/>*/}
-      <HorizontalArticlesList />
+    <View
+      style={[styles.container, {backgroundColor: theme.colors.background}]}>
+      <StatusBar
+        backgroundColor={theme.colors.card}
+        barStyle={theme.dark ? 'light-content' : 'dark-content'}
+      />
+      <TopBar withBackBtn={false}>
+        <Image
+          source={theme.dark ? logoDark : logoDefault}
+          style={styles.logo}
+        />
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Profile')}
+          style={styles.profileIconContainer}>
+          <Ionicons
+            style={styles.profileIcon}
+            name={'person'}
+            size={32}
+            color={theme.colors.text}
+          />
+        </TouchableOpacity>
+      </TopBar>
+      <ArticlesList sections={followedSections} />
     </View>
   );
 }
@@ -24,8 +49,20 @@ function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: 32,
+  },
+  profileIconContainer: {
+    position: 'absolute',
+    right: 8,
+    top: 12,
+  },
+  profileIcon: {
+    padding: 4,
+    paddingHorizontal: 8,
+  },
+  logo: {
+    alignSelf: 'center',
+    width: 148,
+    height: 49,
   },
 });
 
