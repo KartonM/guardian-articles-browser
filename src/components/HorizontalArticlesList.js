@@ -5,8 +5,10 @@ import HorizontalArticleCard from './HorizontalArticleCard';
 import useGuardianArticles from '../hooks/useGuardianArticles';
 import {Card} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+import useTheme from '../hooks/useTheme';
 
 const HorizontalArticlesList = ({section}) => {
+  const [theme] = useTheme();
   const [articles] = useGuardianArticles({
     sectionId: section.id,
     pageSize: 3,
@@ -17,13 +19,20 @@ const HorizontalArticlesList = ({section}) => {
 
   const renderMoreArticlesCard = () => {
     return articles ? (
-      <Card style={styles.moreArticlesCard}>
+      <Card
+        style={[styles.moreArticlesCard, {backgroundColor: theme.colors.card}]}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('SectionArticles', {section: section});
           }}>
-          <Text style={styles.moreArticlesMain}>More...</Text>
-          <Text style={styles.moreArticlesSecondary}>
+          <Text style={[styles.moreArticlesMain, {color: theme.colors.text}]}>
+            More...
+          </Text>
+          <Text
+            style={[
+              styles.moreArticlesSecondary,
+              {color: theme.colors.secondaryText},
+            ]}>
             Browse more articles from '{section.name}' section
           </Text>
         </TouchableOpacity>
@@ -72,7 +81,6 @@ const styles = StyleSheet.create({
   },
   moreArticlesSecondary: {
     marginTop: 12,
-    color: 'gray',
   },
 });
 

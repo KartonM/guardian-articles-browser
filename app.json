@@ -1,4 +1,7 @@
 {
   "name": "GuardianArticlesBrowser",
-  "displayName": "GuardianArticlesBrowser"
+  "displayName": "GuardianArticlesBrowser",
+  "expo": {
+    "userInterfaceStyle": "automatic",
+  }
 }

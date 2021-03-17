@@ -1,10 +1,12 @@
 import {useEffect, useState, useCallback} from 'react';
+import {Alert, BackHandler} from 'react-native';
 
 function useGuardianArticles({
   sectionId = '',
   pageSize = 10,
   initArticles = [],
   rejectListedSectionIds = [],
+  onError = () => {},
 } = {}) {
   const [page, setPage] = useState(1);
   const [shouldFetch, setShouldFetch] = useState(true);
@@ -34,6 +36,10 @@ function useGuardianArticles({
       .then((response) => response.json())
       .then((json) => {
         console.log(json);
+        if (!json?.response) {
+          onError(json?.message);
+          return;
+        }
         const fetchedArticles = json.response.results.map((res) => {
           return {id: res.id, ...res.fields};
         });
@@ -45,7 +51,10 @@ function useGuardianArticles({
         );
         setPage(page + 1);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        onError(error.message);
+      });
   }, [sectionId, page, shouldFetch, pageSize, rejectListedSectionIds]);
 
   return [articles, fetchMore];

@@ -1,6 +1,7 @@
 const initialState = {
   sections: [],
   bookmarkedArticles: [],
+  darkMode: null,
 };
 
 export const setSections = (sections) => ({
@@ -16,6 +17,11 @@ export const bookmarkArticle = (article) => ({
 export const unbookmarkArticle = (articleId) => ({
   type: 'UNBOOKMARK_ARTICLE',
   payload: articleId,
+});
+
+export const setDarkMode = (useDarkMode) => ({
+  type: 'SET_DARKMODE',
+  payload: useDarkMode,
 });
 
 const rootReducer = (state = initialState, action) => {
@@ -39,6 +45,11 @@ const rootReducer = (state = initialState, action) => {
           action.payload,
           ...withoutPrevArticle.bookmarkedArticles,
         ],
+      };
+    case 'SET_DARKMODE':
+      return {
+        ...state,
+        darkMode: action.payload,
       };
     default:
       return state;

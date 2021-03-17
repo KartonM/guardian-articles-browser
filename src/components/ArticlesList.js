@@ -1,10 +1,18 @@
 import React from 'react';
 
-import {FlatList, View, Text, StyleSheet} from 'react-native';
+import {
+  FlatList,
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  BackHandler,
+} from 'react-native';
 import useGuardianArticles from '../hooks/useGuardianArticles';
 import HorizontalArticlesList from './HorizontalArticlesList';
 import ArticleCard from './ArticleCard';
 import {useSelector} from 'react-redux';
+import useTheme from '../hooks/useTheme';
 
 const ListItemType = Object.freeze({section: 1, header: 2, article: 3});
 
@@ -13,6 +21,7 @@ const ArticlesList = ({
   mainSection = {id: '', name: 'All articles'},
   allArticles = undefined,
 }) => {
+  const [theme] = useTheme();
   const [fetchedArticles, fetchMore] = useGuardianArticles({
     pageSize: allArticles ? 0 : 10,
     sectionId: mainSection.id,
@@ -20,6 +29,21 @@ const ArticlesList = ({
     rejectListedSectionIds: useSelector((state) =>
       state.sections.filter((s) => !s.isVisible).map((s) => s.id),
     ),
+    onError: (errorMsg) => {
+      Alert.alert(
+        'Error',
+        errorMsg,
+        [
+          {
+            text: 'Exit',
+            onPress: () => {
+              BackHandler.exitApp();
+            },
+          },
+        ],
+        {cancelable: false},
+      );
+    },
   });
 
   const sectionListItems = sections.map((section) => {
@@ -43,7 +67,11 @@ const ArticlesList = ({
       case ListItemType.section:
         return <HorizontalArticlesList section={item.section} />;
       case ListItemType.header:
-        return <Text style={styles.header}>{item.header}</Text>;
+        return (
+          <Text style={[styles.header, {color: theme.colors.text}]}>
+            {item.header}
+          </Text>
+        );
       case ListItemType.article:
         return <ArticleCard article={item.article} />;
     }

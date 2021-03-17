@@ -1,11 +1,22 @@
 import React from 'react';
-import {StyleSheet, View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+  BackHandler,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useState} from 'react';
 import {Ionicons} from '@expo/vector-icons';
 import {setSections as setPersistedSections} from '../redux/reducer';
+import useTheme from '../hooks/useTheme';
+import TopBar from '../components/TopBar';
 
 function SectionsScreen() {
+  const [theme] = useTheme();
   const persistedSections = useSelector((state) => state.sections);
 
   const [sections, setSections] = useState(persistedSections);
@@ -26,66 +37,95 @@ function SectionsScreen() {
       return;
     }
 
+    const handleFetchError = (errorMsg) => {
+      Alert.alert(
+        'Error',
+        errorMsg,
+        [
+          {
+            text: 'Exit',
+            onPress: () => {
+              BackHandler.exitApp();
+            },
+          },
+        ],
+        {cancelable: false},
+      );
+    };
+
     fetch(
       'https://content.guardianapis.com/sections?api-key=743c0667-8a7b-4eb9-aca4-d234e1bfcae8',
     )
       .then((response) => response.json())
       .then((json) => {
         console.log(json);
+        if (!json?.response) {
+          handleFetchError(json?.message);
+          return;
+        }
         const fetchedSections = json.response.results.map((s) => {
           return {id: s.id, name: s.webTitle};
         });
         console.log(fetchedSections);
+        sections.push(...fetchedSections);
         setSections(fetchedSections);
+      })
+      .catch((error) => {
+        console.error(error);
+        handleFetchError(error.message);
       });
   }, [sections, dispatch]);
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={sections}
-        contentContainerStyle={styles.listContentContainer}
-        keyExtractor={(item) => item.id}
-        renderItem={({item, index}) => (
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionName}>{item.name}</Text>
-            <View style={styles.iconsContainer}>
-              <TouchableOpacity
-                onPress={() => {
-                  sections[index].isVisible = !sections[index].isVisible;
-                  setSections([...sections]);
-                }}>
-                <Ionicons
-                  color="gray"
-                  size={30}
-                  name={item.isVisible ? 'md-eye' : 'md-eye-off'}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  // dispatch(toggleSectionFollowed(item.id));
-                  sections[index].isFollowed = !sections[index].isFollowed;
-                  setSections([...sections]);
-                }}>
-                <Ionicons
-                  color="gold"
-                  size={30}
-                  name={item.isFollowed ? 'ios-star' : 'ios-star-outline'}
-                />
-              </TouchableOpacity>
+    <>
+      <TopBar />
+      <View
+        style={[styles.container, {backgroundColor: theme.colors.background}]}>
+        <FlatList
+          data={sections}
+          contentContainerStyle={styles.listContentContainer}
+          keyExtractor={(item) => item.id}
+          renderItem={({item, index}) => (
+            <View style={styles.sectionContainer}>
+              <Text style={[styles.sectionName, {color: theme.colors.text}]}>
+                {item.name}
+              </Text>
+              <View style={styles.iconsContainer}>
+                <TouchableOpacity
+                  onPress={() => {
+                    sections[index].isVisible = !sections[index].isVisible;
+                    setSections([...sections]);
+                  }}>
+                  <Ionicons
+                    color={theme.colors.secondaryText}
+                    size={30}
+                    name={item.isVisible ? 'md-eye' : 'md-eye-off'}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    // dispatch(toggleSectionFollowed(item.id));
+                    sections[index].isFollowed = !sections[index].isFollowed;
+                    setSections([...sections]);
+                  }}>
+                  <Ionicons
+                    color="gold"
+                    size={30}
+                    name={item.isFollowed ? 'ios-star' : 'ios-star-outline'}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        )}
-      />
-    </View>
+          )}
+        />
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    paddingTop: 32,
   },
   listContentContainer: {
     paddingVertical: 12,

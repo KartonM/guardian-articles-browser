@@ -12,53 +12,74 @@ import {Ionicons} from '@expo/vector-icons';
 import {useDispatch} from 'react-redux';
 import {bookmarkArticle, unbookmarkArticle} from '../redux/reducer';
 import useIsBookmarked from '../hooks/useIsBookmarked';
+import useTheme from '../hooks/useTheme';
+import {removeStrongTags} from '../utils/text';
+import TopBar from '../components/TopBar';
 
 function ArticleScreen() {
+  const [theme] = useTheme();
   const route = useRoute();
   const article = route.params.article;
   const isBookmarked = useIsBookmarked(article);
   const dispatch = useDispatch();
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>{article.headline}</Text>
-      <TouchableOpacity
-        onPress={() => {
-          dispatch(
-            isBookmarked
-              ? unbookmarkArticle(article.id)
-              : bookmarkArticle(article),
-          );
-        }}
-        style={styles.bookmark}>
-        <Ionicons
-          color="blue"
-          size={42}
-          name={isBookmarked ? 'md-bookmark' : 'md-bookmark-outline'}
+    <>
+      <TopBar>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(
+              isBookmarked
+                ? unbookmarkArticle(article.id)
+                : bookmarkArticle(article),
+            );
+          }}
+          style={styles.bookmark}>
+          <Ionicons
+            color={theme.colors.bookmarkColor}
+            size={42}
+            name={isBookmarked ? 'md-bookmark' : 'md-bookmark-outline'}
+          />
+        </TouchableOpacity>
+      </TopBar>
+      <ScrollView
+        style={[styles.container, {backgroundColor: theme.colors.background}]}>
+        <Text style={[styles.title, {color: theme.colors.text}]}>
+          {article.headline}
+        </Text>
+
+        <Text
+          style={[styles.publicationDate, {color: theme.colors.secondaryText}]}>
+          {new Date(
+            Date.parse(article.firstPublicationDate),
+          ).toLocaleDateString()}
+        </Text>
+        <View
+          style={[
+            styles.divider,
+            {borderBottomColor: theme.colors.secondaryText},
+          ]}
         />
-      </TouchableOpacity>
-      <Text style={styles.publicationDate}>
-        {new Date(
-          Date.parse(article.firstPublicationDate),
-        ).toLocaleDateString()}
-      </Text>
-      <View style={styles.divider} />
-      <Text style={styles.standFirst}>{article.trailText}</Text>
-      <Image source={{uri: article.thumbnail}} style={styles.thumbnail} />
-      <Text style={styles.body}>{article.bodyText}</Text>
-    </ScrollView>
+        <Text style={[styles.standFirst, {color: theme.colors.text}]}>
+          {removeStrongTags(article.trailText)}
+        </Text>
+        <Image source={{uri: article.thumbnail}} style={styles.thumbnail} />
+        <Text style={[styles.body, {color: theme.colors.text}]}>
+          {article.bodyText}
+        </Text>
+      </ScrollView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    padding: 16,
-    paddingTop: 32,
+    paddingHorizontal: 16,
   },
   bookmark: {
     position: 'absolute',
-    right: 0,
+    right: 16,
+    top: 4,
   },
   title: {
     fontSize: 24,
@@ -67,10 +88,8 @@ const styles = StyleSheet.create({
   },
   publicationDate: {
     fontSize: 16,
-    color: 'gray',
   },
   divider: {
-    borderBottomColor: 'black',
     borderWidth: 1,
     width: '12%',
     marginTop: 4,
@@ -78,7 +97,6 @@ const styles = StyleSheet.create({
   standFirst: {
     fontSize: 18,
     marginTop: 8,
-    color: 'black',
   },
   body: {
     fontSize: 15,
